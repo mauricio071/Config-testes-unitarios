@@ -174,7 +174,7 @@ Um exemplo simples de como escrever um teste utilizando o React Testing Library:
 
 ```javascript
 import { render, screen } from "@testing-library/react";
-import App from "../App";
+import App from "./App";
 
 describe("App Component", () => {
   it("Renderiza o título da aplicação", () => {
