@@ -170,7 +170,9 @@ yarn test
 
 ## Exemplo Básico de Teste
 
-Um exemplo simples de como escrever um teste utilizando o React Testing Library:
+Aqui está um exemplo simples de como escrever um teste utilizando o React Testing Library:
+
+No arquivo `App.spec.tsx`:
 
 ```javascript
 import { render, screen } from "@testing-library/react";
