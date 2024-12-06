@@ -21,31 +21,31 @@ Execute os comandos abaixo para instalar as dependências necessárias. **Caso e
 #### Instalar o Jest:
 
 ```bash
-$ npm install -D jest jest-environment-jsdom
+npm install -D jest jest-environment-jsdom
 ```
 
 #### Instalar o React Testing Library:
 
 ```bash
-$ npm install -D @testing-library/dom @testing-library/jest-dom @testing-library/react @testing-library/user-event
+npm install -D @testing-library/dom @testing-library/jest-dom @testing-library/react @testing-library/user-event
 ```
 
 #### Instalar o Babel (para suporte a ES6+ e JSX):
 
 ```bash
-$ npm install -D @babel/core @babel/preset-env @babel/preset-react babel-jest
+npm install -D @babel/core @babel/preset-env @babel/preset-react babel-jest
 ```
 
 #### TypeScript (se o projeto utilizar):
 
 ```bash
-$ npm install -D @types/jest @types/react @types/react-dom @babel/preset-typescript ts-node
+npm install -D @types/jest @types/react @types/react-dom @babel/preset-typescript ts-node
 ```
 
 ### Mock para estilos e arquivos estáticos:
 
 ```bash
-$ npm install -D identity-obj-proxy
+npm install -D identity-obj-proxy
 ```
 
 ---
