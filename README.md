@@ -166,6 +166,28 @@ ou
 yarn test
 ```
 
+## 🧐 Caso queira que o Jest observe os arquivos do seu projeto
+
+Você pode configurar o Jest para executar os testes automaticamente sempre que houver mudanças no código-fonte. Para isso, basta adicionar o seguinte comando ao seu script de testes no `package.json`:
+
+```json
+"scripts": {
+    "test": "jest --watchAll"
+}
+```
+
+Com essa configuração, o Jest ficará "observando" todas as alterações no projeto e executará os testes novamente assim que uma mudança for detectada.
+
+### Ativar a cobertura de testes durante a observação:
+
+Para ver relatórios de cobertura enquanto os testes estão sendo executados em modo de observação, você pode adicionar o parâmetro `--coverage`:
+
+```bash
+npm run test --watchAll --coverage
+```
+
+Isso fará com que o Jest gere um relatório de cobertura no terminal sempre que os testes forem executados, fornecendo informações sobre a eficácia da cobertura do código à medida que você faz alterações no projeto.
+
 ---
 
 ## Exemplo Básico de Teste
@@ -192,3 +214,108 @@ describe("App Component", () => {
 ---
 
 Agora você tem um ambiente de testes unitários totalmente configurado para React com suporte a TypeScript, estilos e arquivos estáticos. 🎉
+
+## ⚙️ Configuração do MSW (Mock Service Worker)
+
+O **MSW** é usado para interceptar chamadas de API e retornar dados simulados. Seguem os passos para configurar corretamente no seu projeto.
+
+## 1 - Instalar o msw
+
+Execute o comando abaixo para instalar o MSW:
+
+```bash
+npm install msw@latest --save-dev
+```
+---
+
+## 2 - Instalar o jest-fixed-jsdom
+
+O **Jest-Fixed-JSDOM** corrige problemas relacionados ao ambiente de execução no Jest. Instale-o com o comando:
+
+```bash
+npm install jest-fixed-jsdom
+```
+---
+
+## 3 - Atualizar a Configuração do Jest
+
+No arquivo `jest.config.ts` (ou `.js`), substitua a propriedade `testEnvironment` para utilizar o `jest-fixed-jsdom`:
+
+```javascript
+export default {
+  testEnvironment: "jest-fixed-jsdom",
+};
+```
+---
+
+## 4 - Criar o Servidor MSW
+
+Crie uma pasta chamada `mocks` dentro da pasta `src` e adicione um arquivo `server.ts` com o seguinte conteúdo:
+
+```javascript
+import { handlers } from "./handler";
+import { setupServer } from "msw/node";
+
+export const server = setupServer(...handlers);
+```
+---
+
+## 5 - Configurar os Handlers
+
+Na mesma pasta `mocks`, crie um arquivo chamado `handler.ts` para interceptar e mockar as respostas de APIs. 
+
+Exemplo de configuração:
+
+```javascript
+import { http, HttpResponse } from "msw";
+
+export const handlers = [
+  // Colcoar a api que queira interceptar
+  http.get("https://dummyjson.com/todos", () => {
+    return HttpResponse.json(
+      {
+        todos: [
+          {
+            id: 1,
+            todo: "todo",
+            completed: false,
+            userId: 1,
+          },
+          {
+            id: 2,
+            todo: "todo2",
+            completed: false,
+            userId: 2,
+          },
+          {
+            id: 3,
+            todo: "todo2",
+            completed: false,
+            userId: 2,
+          },
+        ],
+      },
+      {
+        status: 200,
+      }
+    );
+  }),
+];
+
+```
+---
+
+## 6. Atualizar o Arquivo `setup.ts`
+
+No arquivo `setup.ts` (configurado inicialmente para a React Testing Library), adicione o suporte ao MSW com o seguinte código:
+
+```javascript
+import "@testing-library/jest-dom";
+import { server } from "../mocks/server";
+
+// configurção para msw
+beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+afterAll(() => server.close());
+afterEach(() => server.resetHandlers());
+```
+Agora seu ambiente de testes está configurado para interceptar chamadas de API e mockar dados utilizando o MSW. 🎉
